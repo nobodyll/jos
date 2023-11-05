@@ -24,6 +24,7 @@ struct Command {
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
+	{ "backtrace", "Display information about the backtrace", mon_backtrace },
 };
 
 /***** Implementations of basic kernel monitor commands *****/
@@ -57,6 +58,34 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf)
 int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
+	cprintf("Stack backtrace:\n");
+	uint32_t ebp, eip, arg;
+	
+	ebp = read_ebp();
+
+	while(ebp!=0) {
+		cprintf("  ebp %08x", ebp);
+		eip = *(uint32_t*)(ebp + 4);	
+		cprintf(" eip %08x", eip);
+		
+		cprintf(" args");
+		// arg 1 - 5		
+		for (int i = 1; i <= 5; i++) {
+			arg = *(uint32_t*)(ebp + 4 + (4 * i));
+			cprintf(" %08x", arg);
+		}
+		cprintf("\n");
+
+		// printf the symbol name
+		struct Eipdebuginfo info;
+		debuginfo_eip(eip, &info);
+		cprintf("\t%s:", info.eip_file);
+		cprintf("%d: ", info.eip_line);
+		cprintf("%.*s", info.eip_fn_namelen, info.eip_fn_name);
+		cprintf("+%d\n", eip - info.eip_fn_addr);
+		
+		ebp = *(uint32_t*)ebp;
+	}
 	// Your code here.
 	return 0;
 }
@@ -68,7 +97,7 @@ mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 #define WHITESPACE "\t\r\n "
 #define MAXARGS 16
 
-static int
+int
 runcmd(char *buf, struct Trapframe *tf)
 {
 	int argc;
