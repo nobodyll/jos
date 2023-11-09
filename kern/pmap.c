@@ -18,6 +18,7 @@ pde_t *kern_pgdir;		// Kernel's initial page directory
 struct PageInfo *pages;		// Physical page state array
 static struct PageInfo *page_free_list;	// Free list of physical pages
 
+void printpgtbl(pte_t *pgdir);
 
 // --------------------------------------------------------------
 // Detect machine's physical memory setup.
@@ -160,7 +161,9 @@ mem_init(void)
 	// following line.)
 
 	// Permissions: kernel R, user R
+	cprintf("PDX(UVPT) {%d}\n", PDX(UVPT));
 	kern_pgdir[PDX(UVPT)] = PADDR(kern_pgdir) | PTE_U | PTE_P;
+	cprintf("kern_pgdir[PDX(UVPT)] = {%08x}\n", kern_pgdir[PDX(UVPT)]);
 
 	//////////////////////////////////////////////////////////////////////
 	// Allocate an array of npages 'struct PageInfo's and store it in 'pages'.
@@ -227,6 +230,8 @@ mem_init(void)
 	// cprintf("sz = %u\n", sz);
 	// cprintf("xxxx = %u\n", npages * PGSIZE);
 	boot_map_region(kern_pgdir, KERNBASE, sz, 0, PTE_W);
+
+	// printpgtbl(kern_pgdir);
 
 	// Check that the initial page directory has been set up correctly.
 	check_kern_pgdir();
@@ -786,7 +791,8 @@ check_kern_pgdir(void)
   assert(check_va2pa(pgdir, KSTACKTOP - PTSIZE) == ~0);
 
 	// for (i = 0; i < 1024; i++) {
-	// 	cprintf("%d: pde = {%08x}\n",i, pgdir[i]);
+	// 	if (pgdir[i] != 0)
+	// 		cprintf("%d: pde = {%08x}\n",i, pgdir[i]);
 	// }
 
   // check PDE permissions
@@ -1027,4 +1033,27 @@ check_page_installed_pgdir(void)
 	page_free(pp0);
 
 	cprintf("check_page_installed_pgdir() succeeded!\n");
+}
+
+void 
+printpgtbl(pte_t *pgdir) 
+{ 
+	int count = 3;
+	int i;
+	for (i = 0; i < 1024; i++) {
+		if (pgdir[i] != 0 && (pgdir[i] & PTE_P)) {
+			cprintf(".dir[%d] va {0x%08x} pa{0x%08x}\n", i, i << 22, PTE_ADDR(pgdir[i]));
+
+			uint32_t *pgtable = (uint32_t*)PTE_ADDR(pgdir[i]);
+			for (int k = 0; k < 1024; k++) {
+				if (pgtable[k] != 0 && (pgtable[k] & PTE_P)) {
+					uint32_t va = 0;
+					va = (i << 22) | (k << 12); 
+					cprintf("..page[%d] va{0x%08x} -> pa{0x%08x}\n", k, va, PTE_ADDR(pgtable[k]));
+				}
+			}
+			if (--count == 0)
+				break;
+		}
+	}
 }
