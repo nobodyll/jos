@@ -19,6 +19,7 @@ struct PageInfo *pages;		// Physical page state array
 static struct PageInfo *page_free_list;	// Free list of physical pages
 
 void printpgtbl(pte_t *pgdir);
+void printpgdir(uint32_t *pgdir);
 
 // --------------------------------------------------------------
 // Detect machine's physical memory setup.
@@ -232,6 +233,7 @@ mem_init(void)
 	boot_map_region(kern_pgdir, KERNBASE, sz, 0, PTE_W);
 
 	// printpgtbl(kern_pgdir);
+	// printpgdir(kern_pgdir);
 
 	// Check that the initial page directory has been set up correctly.
 	check_kern_pgdir();
@@ -1055,5 +1057,18 @@ printpgtbl(pte_t *pgdir)
 			if (--count == 0)
 				break;
 		}
+	}
+}
+
+
+void 
+printpgdir(uint32_t *pgdir) 
+{ 
+	int count = 3;
+	int i;
+	for (i = 1024; i > 0; i--) {
+		// if (pgdir[i] != 0 && (pgdir[i] & PTE_P)) {
+			cprintf(".dir[%d] va {0x%08x} pa{0x%08x}\n", i, i << 22, PTE_ADDR(pgdir[i]));
+		// }
 	}
 }
