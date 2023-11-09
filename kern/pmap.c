@@ -197,6 +197,9 @@ mem_init(void)
 	//      (ie. perm = PTE_U | PTE_P)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
+	size_t size = ROUNDUP(npages * sizeof(struct PageInfo), PGSIZE);
+	boot_map_region(kern_pgdir, UPAGES, size, PADDR(pages), PTE_U);
+
 
 	//////////////////////////////////////////////////////////////////////
 	// Use the physical memory that 'bootstack' refers to as the kernel
@@ -209,7 +212,9 @@ mem_init(void)
 	//       overwrite memory.  Known as a "guard page".
 	//     Permissions: kernel RW, user NONE
 	// Your code goes here:
-
+	// what physical should mapped to ???
+	boot_map_region(kern_pgdir,KSTACKTOP-KSTKSIZE, KSTKSIZE, PADDR(bootstack), PTE_W);
+ 
 	//////////////////////////////////////////////////////////////////////
 	// Map all of physical memory at KERNBASE.
 	// Ie.  the VA range [KERNBASE, 2^32) should map to
@@ -218,6 +223,10 @@ mem_init(void)
 	// we just set up the mapping anyway.
 	// Permissions: kernel RW, user NONE
 	// Your code goes here:
+	uint32_t sz = 0xFFFFFFFF - KERNBASE + 1;
+	// cprintf("sz = %u\n", sz);
+	// cprintf("xxxx = %u\n", npages * PGSIZE);
+	boot_map_region(kern_pgdir, KERNBASE, sz, 0, PTE_W);
 
 	// Check that the initial page directory has been set up correctly.
 	check_kern_pgdir();
@@ -750,44 +759,55 @@ check_page_alloc(void)
 static void
 check_kern_pgdir(void)
 {
-	uint32_t i, n;
-	pde_t *pgdir;
+  uint32_t i, n;
+  pde_t *pgdir;
 
-	pgdir = kern_pgdir;
+  pgdir = kern_pgdir;
 
-	// check pages array
-	n = ROUNDUP(npages*sizeof(struct PageInfo), PGSIZE);
-	for (i = 0; i < n; i += PGSIZE)
-		assert(check_va2pa(pgdir, UPAGES + i) == PADDR(pages) + i);
+  // check pages array
+  n = ROUNDUP(npages * sizeof(struct PageInfo), PGSIZE);
+  // cprintf("n = %d\n", n);
+  for (i = 0; i < n; i += PGSIZE) {
+    // cprintf("i: %d ,va{%08x} PA{%08x}\n", i, check_va2pa(pgdir, UPAGES + i), PADDR(pages) + i);
+    assert(check_va2pa(pgdir, UPAGES + i) == PADDR(pages) + i);
+  }
 
-
-	// check phys mem
-	for (i = 0; i < npages * PGSIZE; i += PGSIZE)
-		assert(check_va2pa(pgdir, KERNBASE + i) == i);
-
-	// check kernel stack
-	for (i = 0; i < KSTKSIZE; i += PGSIZE)
-		assert(check_va2pa(pgdir, KSTACKTOP - KSTKSIZE + i) == PADDR(bootstack) + i);
-	assert(check_va2pa(pgdir, KSTACKTOP - PTSIZE) == ~0);
-
-	// check PDE permissions
-	for (i = 0; i < NPDENTRIES; i++) {
-		switch (i) {
-		case PDX(UVPT):
-		case PDX(KSTACKTOP-1):
-		case PDX(UPAGES):
-			assert(pgdir[i] & PTE_P);
-			break;
-		default:
-			if (i >= PDX(KERNBASE)) {
-				assert(pgdir[i] & PTE_P);
-				assert(pgdir[i] & PTE_W);
-			} else
-				assert(pgdir[i] == 0);
-			break;
-		}
+  // check phys mem
+  for (i = 0; i < npages * PGSIZE; i += PGSIZE) {
+    // cprintf("i: %d ,va{%08x} PA{%08x}\n", i, check_va2pa(pgdir, KERNBASE + i), i);
+    assert(check_va2pa(pgdir, KERNBASE + i) == i);
 	}
-	cprintf("check_kern_pgdir() succeeded!\n");
+    // assert(check_va2pa(pgdir, KERNBASE + i) == i);
+
+  // check kernel stack
+  for (i = 0; i < KSTKSIZE; i += PGSIZE) 
+    assert(check_va2pa(pgdir, KSTACKTOP - KSTKSIZE + i) ==
+           PADDR(bootstack) + i);
+  assert(check_va2pa(pgdir, KSTACKTOP - PTSIZE) == ~0);
+
+	// for (i = 0; i < 1024; i++) {
+	// 	cprintf("%d: pde = {%08x}\n",i, pgdir[i]);
+	// }
+
+  // check PDE permissions
+  for (i = 0; i < NPDENTRIES; i++) {
+    switch (i) {
+    case PDX(UVPT):
+    case PDX(KSTACKTOP - 1):
+    case PDX(UPAGES):
+      assert(pgdir[i] & PTE_P);
+      break;
+    default:
+      if (i >= PDX(KERNBASE)) {
+				// cprintf("i: {%d}\n", i);
+        assert(pgdir[i] & PTE_P);
+        assert(pgdir[i] & PTE_W);
+      } else
+        assert(pgdir[i] == 0);
+      break;
+    }
+  }
+  cprintf("check_kern_pgdir() succeeded!\n");
 }
 
 // This function returns the physical address of the page containing 'va',
