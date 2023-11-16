@@ -255,8 +255,8 @@ mem_init(void)
 	// printpgtbl(kern_pgdir);
 	// printpgdir(kern_pgdir);
 
-	extern pde_t entry_pgdir[];
-	printpgtbl(entry_pgdir);
+	// extern pde_t entry_pgdir[];
+	// printpgtbl(entry_pgdir);
 	// printpgdir((uint32_t*)entry_pgdir);
 	//////////////////////////////////////////////////////////////////////
 
