@@ -1,0 +1,17 @@
+{
+    "winopacity.opacity": 50,
+    "files.associations": {
+        "memlayout.h": "c",
+        "*.tcc": "c",
+        "string_view": "c",
+        "functional": "c",
+        "variant": "c",
+        "atomic": "c",
+        "fstream": "c",
+        "sstream": "c",
+        "types.h": "c"
+    },
+    "lldb.showDisassembly": "auto",
+    "lldb.dereferencePointers": true,
+    "lldb.consoleMode": "commands"
+}
