@@ -210,7 +210,7 @@ mem_init(void)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
 	size_t size = ROUNDUP(npages * sizeof(struct PageInfo), PGSIZE);
-	boot_map_region(kern_pgdir, UPAGES, size, PADDR(pages), PTE_U);
+	boot_map_region(kern_pgdir, UPAGES, size, PADDR(pages), PTE_U | PTE_W);
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ mem_init(void)
 	//    - envs itself -- kernel RW, user NONE
 	// LAB 3: Your code here.
 	size = ROUNDUP(env_size, PGSIZE);
-	boot_map_region(kern_pgdir, UENVS, size, PADDR(envs), PTE_U);
+	boot_map_region(kern_pgdir, UENVS, size, PADDR(envs), PTE_U | PTE_W);
 
 	//////////////////////////////////////////////////////////////////////
 	// Use the physical memory that 'bootstack' refers to as the kernel
@@ -250,8 +250,16 @@ mem_init(void)
 	// cprintf("xxxx = %u\n", npages * PGSIZE);
 	boot_map_region(kern_pgdir, KERNBASE, sz, 0, PTE_W);
 
+	
+	//////////////////////////////////////////////////////////////////////
 	// printpgtbl(kern_pgdir);
 	// printpgdir(kern_pgdir);
+
+	extern pde_t entry_pgdir[];
+	printpgtbl(entry_pgdir);
+	// printpgdir((uint32_t*)entry_pgdir);
+	//////////////////////////////////////////////////////////////////////
+
 
 	// Check that the initial page directory has been set up correctly.
 	check_kern_pgdir();
@@ -1122,9 +1130,9 @@ printpgdir(uint32_t *pgdir)
 { 
 	int count = 3;
 	int i;
-	for (i = 1024; i > 0; i--) {
-		// if (pgdir[i] != 0 && (pgdir[i] & PTE_P)) {
+	for (i = 1023; i > 0; i--) {
+		if (pgdir[i] != 0 && (pgdir[i] & PTE_P)) {
 			cprintf(".dir[%d] va {0x%08x} pa{0x%08x}\n", i, i << 22, PTE_ADDR(pgdir[i]));
-		// }
+		}
 	}
 }
