@@ -419,7 +419,8 @@ load_icode(struct Env *e, uint8_t *binary)
   // LAB 3: Your code here.
   struct PageInfo *p = page_alloc(1);
   p->pp_ref++;
-  e->env_pgdir[PDX(USTACKTOP - PGSIZE)] = page2pa(p) | PTE_P | PTE_U;
+
+	page_insert(e->env_pgdir, p, (void*)(USTACKTOP - PGSIZE), PTE_P | PTE_U | PTE_W);
 
   e->env_tf.tf_esp = USTACKTOP;
 
