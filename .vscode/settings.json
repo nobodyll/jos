@@ -9,7 +9,9 @@
         "atomic": "c",
         "fstream": "c",
         "sstream": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "pmap.h": "c",
+        "string.h": "c"
     },
     "lldb.showDisassembly": "auto",
     "lldb.dereferencePointers": true,

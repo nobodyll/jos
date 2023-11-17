@@ -210,7 +210,7 @@ mem_init(void)
 	//    - pages itself -- kernel RW, user NONE
 	// Your code goes here:
 	size_t size = ROUNDUP(npages * sizeof(struct PageInfo), PGSIZE);
-	boot_map_region(kern_pgdir, UPAGES, size, PADDR(pages), PTE_U | PTE_W);
+	boot_map_region(kern_pgdir, UPAGES, size, PADDR(pages), PTE_U);
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -221,7 +221,7 @@ mem_init(void)
 	//    - envs itself -- kernel RW, user NONE
 	// LAB 3: Your code here.
 	size = ROUNDUP(env_size, PGSIZE);
-	boot_map_region(kern_pgdir, UENVS, size, PADDR(envs), PTE_U | PTE_W);
+	boot_map_region(kern_pgdir, UENVS, size, PADDR(envs), PTE_U);
 
 	//////////////////////////////////////////////////////////////////////
 	// Use the physical memory that 'bootstack' refers to as the kernel

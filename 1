@@ -1,2 +1,9 @@
-break mem_init
-break /home/dev/src/xv6/x86/6.828/lab/kern/pmap.c:147
+layout split
+wh asm 9
+focus cmd
+b load_icode
+b region_alloc
+b env_run
+c
+c
+c
