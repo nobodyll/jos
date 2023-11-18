@@ -25,6 +25,10 @@ struct Pseudodesc idt_pd = {
 	sizeof(idt) - 1, (uint32_t) idt
 };
 
+typedef void(*handler)();
+
+extern  handler vectors[31];
+
 
 static const char *trapname(int trapno)
 {
@@ -62,12 +66,18 @@ static const char *trapname(int trapno)
 void
 trap_init(void)
 {
-	extern struct Segdesc gdt[];
+  extern struct Segdesc gdt[];
 
-	// LAB 3: Your code here.
+  // LAB 3: Your code here.
+	// 
+  for (int i = 0; i < 32; i++) {
+    SETGATE(idt[i], 1, GD_KT, vectors[i], 0);
+		// cprintf("idt[%d] {%08x} ", i, idt[i]);
+		// cprintf("vectors[%d] {%08x}\n", i, vectors[i]);
+  }
 
-	// Per-CPU setup 
-	trap_init_percpu();
+  // Per-CPU setup
+  trap_init_percpu();
 }
 
 // Initialize and load the per-CPU TSS and IDT
