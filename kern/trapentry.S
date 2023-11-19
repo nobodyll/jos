@@ -79,6 +79,35 @@ TRAPHANDLER_NOEC(vector29, 29)
 TRAPHANDLER_NOEC(vector30, 30)
 TRAPHANDLER_NOEC(vector31, 31)
 
+
+
+/*
+ * Lab 3: Your code here for _alltraps
+ */
+
+.global _alltraps
+_alltraps:
+	pushl %ds
+	pushl %es
+	pushal
+
+	// set up data segment for kernel
+	movw $GD_KD, %ax
+	movw %ax, %ds
+	movw %ax, %es
+
+	pushl %esp
+	call trap
+	addl $4, %esp
+
+trapret:
+	POPAL
+	popl %ES
+	popl %DS
+	addl $8, %esp
+	iret
+
+.data
 .global vectors
 vectors:
 	.long vector0
@@ -113,33 +142,6 @@ vectors:
 	.long vector29
 	.long vector30
 	.long vector31
-
-
-/*
- * Lab 3: Your code here for _alltraps
- */
-
-.global _alltraps
-_alltraps:
-	pushl %ds
-	pushl %es
-	pushal
-
-	// set up data segment for kernel
-	movw $GD_KD, %ax
-	movw %ax, %ds
-	movw %ax, %es
-
-	pushl %esp
-	call trap
-	addl $4, %esp
-
-trapret:
-	POPAL
-	popl %ES
-	popl %DS
-	addl $8, %esp
-	iret
 
 /*
 * 
