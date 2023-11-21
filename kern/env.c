@@ -386,12 +386,13 @@ load_icode(struct Env *e, uint8_t *binary)
 
       len -= n;
       srcaddr += n;
-      dst += PGSIZE;
+      dst = p_va + PGSIZE;
     }
 
     if (ph->p_filesz < ph->p_memsz) {
       len = ph->p_memsz - ph->p_filesz;
-      dst = (uint32_t)binary + ph->p_offset + ph->p_filesz;
+      // dst = (uint32_t)binary + ph->p_offset + ph->p_filesz;
+      dst = ph->p_va + ph->p_filesz;
       while (len > 0) {
         uint32_t p_va = ROUNDDOWN(dst, PGSIZE);
 
@@ -407,8 +408,7 @@ load_icode(struct Env *e, uint8_t *binary)
 				memset(dstaddr, 0, n);
 
         len -= n;
-        srcaddr += n;
-        dst += PGSIZE;
+				dst = p_va + PGSIZE;
       }
     }
   }

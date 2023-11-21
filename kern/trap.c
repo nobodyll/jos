@@ -27,7 +27,7 @@ struct Pseudodesc idt_pd = {
 
 typedef void(*handler)();
 
-extern  handler vectors[31];
+extern  handler vectors[51];
 
 
 static const char *trapname(int trapno)
@@ -70,12 +70,13 @@ trap_init(void)
 
   // LAB 3: Your code here.
   //
-  for (int i = 0; i < 32; i++) {
+  for (int i = 0; i < 50; i++) {
     SETGATE(idt[i], 1, GD_KT, vectors[i], 0);
     // cprintf("idt[%d] {%08x} ", i, idt[i]);
     // cprintf("vectors[%d] {%08x}\n", i, vectors[i]);
   }
-	SETGATE(idt[3], 1, GD_KT, vectors[3], 3);
+	SETGATE(idt[T_BRKPT], 1, GD_KT, vectors[T_BRKPT], 3);
+	SETGATE(idt[T_SYSCALL], 1, GD_KT, vectors[T_SYSCALL], 3);
 	// cprintf("idt[3] {%08x} \n", idt[3]);
 	// cprintf("idt[3] {%08x} \n", (int) (*((int*)(&idt[3]) + 1)) );
   trap_init_percpu();
@@ -153,28 +154,37 @@ print_regs(struct PushRegs *regs)
 static void
 trap_dispatch(struct Trapframe *tf)
 {
-	// Handle processor exceptions.
-	// LAB 3: Your code here.
-	switch (tf->tf_trapno)
-	{
-	case T_PGFLT: // 14 page fault
-		page_fault_handler(tf);
-		break;
-	case T_BRKPT:
-		monitor(tf);
-		break;
-	
-	default:
-		break;
-	}
+  // Handle processor exceptions.
+  // LAB 3: Your code here.
+  switch (tf->tf_trapno) {
+  case T_PGFLT: // 14 page fault
+    page_fault_handler(tf);
+    break;
+  case T_BRKPT:
+    monitor(tf);
+    break;
+  case T_SYSCALL: {
+		uint32_t syscallno = tf->tf_regs.reg_eax;
+		uint32_t a1 = tf->tf_regs.reg_edx;
+		uint32_t a2 = tf->tf_regs.reg_ecx;
+		uint32_t a3 = tf->tf_regs.reg_ebx;
+		uint32_t a4 = tf->tf_regs.reg_edi;
+		uint32_t a5 = tf->tf_regs.reg_esi;
+		
+    tf->tf_regs.reg_eax = syscall(syscallno, a1, a2, a3, a4, a5);
+		return ;
+  } break;
+  default:
+    break;
+  }
 
-	// Unexpected trap: The user process or the kernel has a bug.
-	print_trapframe(tf);
-	if (tf->tf_cs == GD_KT)
-		panic("unhandled trap in kernel");
-	else {
-		env_destroy(curenv);
-		return;
+  // Unexpected trap: The user process or the kernel has a bug.
+  print_trapframe(tf);
+  if (tf->tf_cs == GD_KT)
+    panic("unhandled trap in kernel");
+  else {
+    env_destroy(curenv);
+    return;
 	}
 }
 
