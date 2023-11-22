@@ -12,7 +12,9 @@
         "types.h": "c",
         "pmap.h": "c",
         "string.h": "c",
-        "lib.h": "c"
+        "lib.h": "c",
+        "monitor.h": "c",
+        "env.h": "c"
     },
     "lldb.showDisassembly": "auto",
     "lldb.dereferencePointers": true,

@@ -157,22 +157,28 @@ trap_dispatch(struct Trapframe *tf)
   // Handle processor exceptions.
   // LAB 3: Your code here.
   switch (tf->tf_trapno) {
+  case T_DEBUG: {
+    cprintf("\n");
+    cprintf("next instruction at %08x\n", tf->tf_eip);
+    monitor(tf);
+  }
   case T_PGFLT: // 14 page fault
     page_fault_handler(tf);
     break;
   case T_BRKPT:
+    cprintf("next instruction at %08x\n", tf->tf_eip);
     monitor(tf);
     break;
   case T_SYSCALL: {
-		uint32_t syscallno = tf->tf_regs.reg_eax;
-		uint32_t a1 = tf->tf_regs.reg_edx;
-		uint32_t a2 = tf->tf_regs.reg_ecx;
-		uint32_t a3 = tf->tf_regs.reg_ebx;
-		uint32_t a4 = tf->tf_regs.reg_edi;
-		uint32_t a5 = tf->tf_regs.reg_esi;
-		
+    uint32_t syscallno = tf->tf_regs.reg_eax;
+    uint32_t a1 = tf->tf_regs.reg_edx;
+    uint32_t a2 = tf->tf_regs.reg_ecx;
+    uint32_t a3 = tf->tf_regs.reg_ebx;
+    uint32_t a4 = tf->tf_regs.reg_edi;
+    uint32_t a5 = tf->tf_regs.reg_esi;
+
     tf->tf_regs.reg_eax = syscall(syscallno, a1, a2, a3, a4, a5);
-		return ;
+    return;
   } break;
   default:
     break;
@@ -185,7 +191,7 @@ trap_dispatch(struct Trapframe *tf)
   else {
     env_destroy(curenv);
     return;
-	}
+  }
 }
 
 void
