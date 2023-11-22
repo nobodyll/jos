@@ -11,7 +11,8 @@
         "sstream": "c",
         "types.h": "c",
         "pmap.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "lib.h": "c"
     },
     "lldb.showDisassembly": "auto",
     "lldb.dereferencePointers": true,

@@ -660,9 +660,28 @@ static uintptr_t user_mem_check_addr;
 int
 user_mem_check(struct Env *env, const void *va, size_t len, int perm)
 {
-	// LAB 3: Your code here.
+  // LAB 3: Your code here.
+  // begin_addr and end_addr is page-aligned.
+  uint32_t begin_addr = ROUNDDOWN((uint32_t)va, PGSIZE);
+  uint32_t end_addr = ROUNDDOWN((uint32_t)(va + len), PGSIZE);
 
-	return 0;
+  perm = perm | PTE_P;
+
+  for (uint32_t i = begin_addr; i <= end_addr; i += PGSIZE) {
+    pte_t *pte = pgdir_walk(env->env_pgdir, (void *)i, 0);
+
+    if ((pte == NULL) || !(*pte & PTE_P) || ((*pte & 0xfff) & perm) != perm)
+		 {
+        if (i == begin_addr)
+          user_mem_check_addr = (uint32_t)va;
+        else
+          user_mem_check_addr = i;
+
+        return -E_FAULT;
+      }
+	} 
+
+  return 0;
 }
 
 //

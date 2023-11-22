@@ -1,6 +1,9 @@
 layout split
-wh asm 9
+#wh asm 
 focus cmd
 
-b *0x800e7b
+add-symbol-file obj/user/breakpoint
+
+b *libmain
+b *umain
 c
