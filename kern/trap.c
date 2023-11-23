@@ -71,7 +71,7 @@ trap_init(void)
   // LAB 3: Your code here.
   //
   for (int i = 0; i < 50; i++) {
-    SETGATE(idt[i], 1, GD_KT, vectors[i], 0);
+    SETGATE(idt[i], 0, GD_KT, vectors[i], 0);
     // cprintf("idt[%d] {%08x} ", i, idt[i]);
     // cprintf("vectors[%d] {%08x}\n", i, vectors[i]);
   }
