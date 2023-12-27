@@ -27,7 +27,6 @@ i386_init(void)
 
 	cprintf("6828 decimal is %o octal!\n", 6828);
 
-	// Lab 2 memory management initialization functions
 	mem_init();
 
 	// Lab 3 user environment initialization functions
@@ -52,7 +51,11 @@ i386_init(void)
 	ENV_CREATE(TEST, ENV_TYPE_USER);
 #else
 	// Touch all you want.
-	ENV_CREATE(user_primes, ENV_TYPE_USER);
+	// ENV_CREATE(user_hello, ENV_TYPE_USER);
+	// ENV_CREATE(user_divzero, ENV_TYPE_USER);
+	// ENV_CREATE(user_softint, ENV_TYPE_USER);
+	ENV_CREATE(user_breakpoint, ENV_TYPE_USER);
+	// ENV_CREATE(user_testbss, ENV_TYPE_USER);
 #endif // TEST*
 
 	// Schedule and run the first user environment!

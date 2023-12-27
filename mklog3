@@ -1,0 +1,199 @@
+echo "   -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs" | cmp -s obj/.vars.KERN_CFLAGS || echo "   -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs" > obj/.vars.KERN_CFLAGS
+echo + as kern/entry.S
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/entry.o kern/entry.S
+echo + cc kern/entrypgdir.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/entrypgdir.o kern/entrypgdir.c
+echo "" | cmp -s obj/.vars.INIT_CFLAGS || echo "" > obj/.vars.INIT_CFLAGS
+echo + cc kern/init.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs  -c -o obj/kern/init.o kern/init.c
+echo + cc kern/console.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/console.o kern/console.c
+echo + cc kern/monitor.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/monitor.o kern/monitor.c
+echo + cc kern/pmap.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/pmap.o kern/pmap.c
+echo + cc kern/env.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/env.o kern/env.c
+echo + cc kern/kclock.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/kclock.o kern/kclock.c
+echo + cc kern/printf.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/printf.o kern/printf.c
+echo + cc kern/trap.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/trap.o kern/trap.c
+echo + as kern/trapentry.S
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/trapentry.o kern/trapentry.S
+echo + cc kern/syscall.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/syscall.o kern/syscall.c
+echo + cc kern/kdebug.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/kdebug.o kern/kdebug.c
+echo + cc lib/printfmt.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/printfmt.o lib/printfmt.c
+echo + cc lib/readline.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/readline.o lib/readline.c
+echo + cc lib/string.c
+mkdir -p obj/kern
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/kern/string.o lib/string.c
+echo "   -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs" | cmp -s obj/.vars.USER_CFLAGS || echo "   -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs" > obj/.vars.USER_CFLAGS
+echo + cc[USER] lib/console.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/console.o lib/console.c
+echo + cc[USER] lib/libmain.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/libmain.o lib/libmain.c
+echo + cc[USER] lib/exit.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/exit.o lib/exit.c
+echo + cc[USER] lib/panic.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/panic.o lib/panic.c
+echo + cc[USER] lib/printf.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/printf.o lib/printf.c
+echo + cc[USER] lib/printfmt.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/printfmt.o lib/printfmt.c
+echo + cc[USER] lib/readline.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/readline.o lib/readline.c
+echo + cc[USER] lib/string.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/string.o lib/string.c
+echo + cc[USER] lib/syscall.c
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/syscall.o lib/syscall.c
+echo + ar obj/lib/libjos.a
+ar r obj/lib/libjos.a obj/lib/console.o obj/lib/libmain.o obj/lib/exit.o obj/lib/panic.o obj/lib/printf.o obj/lib/printfmt.o obj/lib/readline.o obj/lib/string.o obj/lib/syscall.o
+echo + cc[USER] user/hello.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/hello.o user/hello.c
+echo + as[USER] lib/entry.S
+mkdir -p obj/lib
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/lib/entry.o lib/entry.S
+echo + ld obj/user/hello
+ld -o obj/user/hello -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/hello.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/hello > obj/user/hello.asm
+nm -n obj/user/hello > obj/user/hello.sym
+echo + cc[USER] user/buggyhello.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/buggyhello.o user/buggyhello.c
+echo + ld obj/user/buggyhello
+ld -o obj/user/buggyhello -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/buggyhello.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/buggyhello > obj/user/buggyhello.asm
+nm -n obj/user/buggyhello > obj/user/buggyhello.sym
+echo + cc[USER] user/buggyhello2.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/buggyhello2.o user/buggyhello2.c
+echo + ld obj/user/buggyhello2
+ld -o obj/user/buggyhello2 -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/buggyhello2.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/buggyhello2 > obj/user/buggyhello2.asm
+nm -n obj/user/buggyhello2 > obj/user/buggyhello2.sym
+echo + cc[USER] user/evilhello.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/evilhello.o user/evilhello.c
+echo + ld obj/user/evilhello
+ld -o obj/user/evilhello -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/evilhello.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/evilhello > obj/user/evilhello.asm
+nm -n obj/user/evilhello > obj/user/evilhello.sym
+echo + cc[USER] user/testbss.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/testbss.o user/testbss.c
+echo + ld obj/user/testbss
+ld -o obj/user/testbss -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/testbss.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/testbss > obj/user/testbss.asm
+nm -n obj/user/testbss > obj/user/testbss.sym
+echo + cc[USER] user/divzero.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/divzero.o user/divzero.c
+echo + ld obj/user/divzero
+ld -o obj/user/divzero -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/divzero.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/divzero > obj/user/divzero.asm
+nm -n obj/user/divzero > obj/user/divzero.sym
+echo + cc[USER] user/breakpoint.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/breakpoint.o user/breakpoint.c
+echo + ld obj/user/breakpoint
+ld -o obj/user/breakpoint -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/breakpoint.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/breakpoint > obj/user/breakpoint.asm
+nm -n obj/user/breakpoint > obj/user/breakpoint.sym
+echo + cc[USER] user/softint.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/softint.o user/softint.c
+echo + ld obj/user/softint
+ld -o obj/user/softint -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/softint.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/softint > obj/user/softint.asm
+nm -n obj/user/softint > obj/user/softint.sym
+echo + cc[USER] user/badsegment.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/badsegment.o user/badsegment.c
+echo + ld obj/user/badsegment
+ld -o obj/user/badsegment -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/badsegment.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/badsegment > obj/user/badsegment.asm
+nm -n obj/user/badsegment > obj/user/badsegment.sym
+echo + cc[USER] user/faultread.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/faultread.o user/faultread.c
+echo + ld obj/user/faultread
+ld -o obj/user/faultread -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/faultread.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/faultread > obj/user/faultread.asm
+nm -n obj/user/faultread > obj/user/faultread.sym
+echo + cc[USER] user/faultreadkernel.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/faultreadkernel.o user/faultreadkernel.c
+echo + ld obj/user/faultreadkernel
+ld -o obj/user/faultreadkernel -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/faultreadkernel.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/faultreadkernel > obj/user/faultreadkernel.asm
+nm -n obj/user/faultreadkernel > obj/user/faultreadkernel.sym
+echo + cc[USER] user/faultwrite.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/faultwrite.o user/faultwrite.c
+echo + ld obj/user/faultwrite
+ld -o obj/user/faultwrite -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/faultwrite.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/faultwrite > obj/user/faultwrite.asm
+nm -n obj/user/faultwrite > obj/user/faultwrite.sym
+echo + cc[USER] user/faultwritekernel.c
+mkdir -p obj/user
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_USER -gstabs -c -o obj/user/faultwritekernel.o user/faultwritekernel.c
+echo + ld obj/user/faultwritekernel
+ld -o obj/user/faultwritekernel -T user/user.ld -m elf_i386 -nostdlib obj/lib/entry.o obj/user/faultwritekernel.o -Lobj/lib -ljos /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a
+objdump -S obj/user/faultwritekernel > obj/user/faultwritekernel.asm
+nm -n obj/user/faultwritekernel > obj/user/faultwritekernel.sym
+echo "-m elf_i386 -T kern/kernel.ld -nostdlib" | cmp -s obj/.vars.KERN_LDFLAGS || echo "-m elf_i386 -T kern/kernel.ld -nostdlib" > obj/.vars.KERN_LDFLAGS
+echo + ld obj/kern/kernel
+ld -o obj/kern/kernel -m elf_i386 -T kern/kernel.ld -nostdlib obj/kern/entry.o obj/kern/entrypgdir.o obj/kern/init.o obj/kern/console.o obj/kern/monitor.o obj/kern/pmap.o obj/kern/env.o obj/kern/kclock.o obj/kern/printf.o obj/kern/trap.o obj/kern/trapentry.o obj/kern/syscall.o obj/kern/kdebug.o  obj/kern/printfmt.o  obj/kern/readline.o  obj/kern/string.o /usr/lib/gcc/x86_64-linux-gnu/11/32/libgcc.a -b binary  obj/user/hello  obj/user/buggyhello  obj/user/buggyhello2  obj/user/evilhello  obj/user/testbss  obj/user/divzero  obj/user/breakpoint  obj/user/softint  obj/user/badsegment  obj/user/faultread  obj/user/faultreadkernel  obj/user/faultwrite  obj/user/faultwritekernel
+objdump -S obj/kern/kernel > obj/kern/kernel.asm
+nm -n obj/kern/kernel > obj/kern/kernel.sym
+echo + as boot/boot.S
+mkdir -p obj/boot
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -c -o obj/boot/boot.o boot/boot.S
+echo + cc -Os boot/main.c
+gcc -pipe -nostdinc    -O1 -fno-builtin -I. -MD -fno-omit-frame-pointer -std=gnu99 -static -Wall -Wno-format -Wno-unused -Werror -gstabs -m32 -fno-tree-ch -fno-stack-protector -DJOS_KERNEL -gstabs -Os -c -o obj/boot/main.o boot/main.c
+echo + ld boot/boot
+ld -m elf_i386 -N -e start -Ttext 0x7C00 -o obj/boot/boot.out obj/boot/boot.o obj/boot/main.o
+objdump -S obj/boot/boot.out >obj/boot/boot.asm
+objcopy -S -O binary -j .text obj/boot/boot.out obj/boot/boot
+perl boot/sign.pl obj/boot/boot
+echo + mk obj/kern/kernel.img
+dd if=/dev/zero of=obj/kern/kernel.img~ count=10000 2>/dev/null
+dd if=obj/boot/boot of=obj/kern/kernel.img~ conv=notrunc 2>/dev/null
+dd if=obj/kern/kernel of=obj/kern/kernel.img~ seek=1 conv=notrunc 2>/dev/null
+mv obj/kern/kernel.img~ obj/kern/kernel.img
+sed "s/localhost:1234/localhost:26000/" < .gdbinit.tmpl > .gdbinit
+echo "***"
+echo "*** Use Ctrl-a x to exit qemu"
+echo "***"
+qemu-system-i386 -nographic -drive file=obj/kern/kernel.img,index=0,media=disk,format=raw -serial mon:stdio -gdb tcp::26000 -D qemu.log 

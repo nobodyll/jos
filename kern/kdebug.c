@@ -142,6 +142,8 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 		// Make sure this memory is valid.
 		// Return -1 if it is not.  Hint: Call user_mem_check.
 		// LAB 3: Your code here.
+		if (user_mem_check(curenv, usd, sizeof(struct UserStabData), PTE_U) < 0)
+			return -1;
 
 		stabs = usd->stabs;
 		stab_end = usd->stab_end;
@@ -150,6 +152,13 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 
 		// Make sure the STABS and string table memory is valid.
 		// LAB 3: Your code here.
+		const struct Stab *i = stabs;
+		for (; i < stab_end; i++) {
+			if (user_mem_check(curenv, i, sizeof(struct Stab), PTE_U) < 0) {
+				return -1;
+			}
+		}
+
 	}
 
 	// String table validity checks
@@ -205,7 +214,14 @@ debuginfo_eip(uintptr_t addr, struct Eipdebuginfo *info)
 	//	which one.
 	// Your code here.
 
-
+	stab_binsearch(stabs, &lline, &rline, N_SLINE, addr);
+	if (lline <= rline) {
+		// stabs[lfun] points to the function's Line info 
+		// stabs[lfun]->n_desc is the source code line number
+		// stabs[lfun]->n_value is this line's begin address 
+		// not equal to eip
+		info->eip_line = stabs[lline].n_desc; 
+	}
 	// Search backwards from the line number for the relevant filename
 	// stab.
 	// We can't just use the "lfile" stab because inlined functions

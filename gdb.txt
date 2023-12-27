@@ -1,0 +1,275 @@
+Focus set to cmd window.
+Hardware watchpoint 2: npages
+$2 = (struct PageInfo *) 0x0
+$3 = 0
+=> 0xf0100c27 <mem_init+44>:	mov    $0x34,%eax
+=> 0xf0100c31 <mem_init+54>:	shl    $0x6,%eax
+=> 0xf0100c3a <mem_init+63>:	add    $0x4000,%eax
+=> 0xf0100c3f <mem_init+68>:	mov    %eax,%edx
+=> 0xf0100c4a <mem_init+79>:	mov    %eax,%edx
+
+Hardware watchpoint 2: npages
+
+Old value = 0
+New value = 32768
+mem_init () at kern/pmap.c:55
+=> 0xf0100c5d <mem_init+98>:	mov    $0x1000,%eax
+=> 0xf0100c6d <mem_init+114>:	add    $0xc,%esp
+=> 0xf0100c7d <mem_init+130>:	mov    0x1fb4(%ebx),%eax
+=> 0xf0100c83 <mem_init+136>:	add    $0x10,%esp
+=> 0xf0100c91 <mem_init+150>:	lea    0x10000000(%eax),%edx
+=> 0xf0100c97 <mem_init+156>:	or     $0x5,%edx
+Continuing.
+=> 0xf0101d25 <memset+53>:	rep stos %eax,%es:(%edi)
+
+Hardware watchpoint 2: npages
+
+Old value = 32768
+New value = 0
+0xf0101d25 in memset (v=0xf0114000 <charcode>, c=0, n=262144) at lib/string.c:131
+#1  0xf0100cc2 in mem_init () at kern/pmap.c:169
+#0  0xf0101d25 in memset (v=0xf0114000 <charcode>, c=0, n=262144) at lib/string.c:131
+$4 = 0xf01142c4
+#1  0xf0100cc2 in mem_init () at kern/pmap.c:169
+$5 = (struct PageInfo *) 0x0
+eax            0xeec00000          -289406976
+ecx            0x0                 0
+edx            0x0                 0
+ebx            0x802000            8396800
+esp            0xeebfdfc4          0xeebfdfc4
+ebp            0xeebfdff0          0xeebfdff0
+esi            0x0                 0
+edi            0x0                 0
+eip            0x800033            0x800033 <umain>
+eflags         0x82                [ IOPL=0 SF ]
+cs             0x1b                27
+ss             0x23                35
+ds             0x23                35
+es             0x23                35
+fs             0x23                35
+gs             0x23                35
+fs_base        0x0                 0
+gs_base        0x0                 0
+k_gs_base      0x0                 0
+cr0            0x80050033          [ PG AM WP NE ET MP PE ]
+cr2            0x0                 0
+cr3            0x3bc000            [ PDBR=956 PCID=0 ]
+cr4            0x0                 [ ]
+cr8            0x0                 0
+efer           0x0                 [ ]
+xmm0           {v4_float = {0x0, 0x0, 0x0, 0x0}, v2_double = {0x0, 0x0}, v16_int8 = {0x0 <repeats 16 times>}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x0}, v2_int64 = {0x0, 0x0}, uint128 = 0x0}
+xmm1           {v4_float = {0x0, 0x0, 0x0, 0x0}, v2_double = {0x0, 0x0}, v16_int8 = {0x0 <repeats 16 times>}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x0}, v2_int64 = {0x0, 0x0}, uint128 = 0x0}
+xmm2           {v4_float = {0x0, 0x0, 0x0, 0x0}, v2_double = {0x0, 0x0}, v16_int8 = {0x0 <repeats 16 times>}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x0}, v2_int64 = {0x0, 0x0}, uint128 = 0x0}
+xmm3           {v4_float = {0x0, 0x0, 0x0, 0x0}, v2_double = {0x0, 0x0}, v16_int8 = {0x0 <repeats 16 times>}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x0}, v2_int64 = {0x0, 0x0}, uint128 = 0x0}
+xmm4           {v4_float = {0x0, 0x0, 0x0, 0x0}, v2_double = {0x0, 0x0}, v16_int8 = {0x0 <repeats 16 times>}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x0}, v2_int64 = {0x0, 0x0}, uint128 = 0x0}
+xmm5           {v4_float = {0x0, 0x0, 0x0, 0x0}, v2_double = {0x0, 0x0}, v16_int8 = {0x0 <repeats 16 times>}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x0}, v2_int64 = {0x0, 0x0}, uint128 = 0x0}
+xmm6           {v4_float = {0x0, 0x0, 0x0, 0x0}, v2_double = {0x0, 0x0}, v16_int8 = {0x0 <repeats 16 times>}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x0}, v2_int64 = {0x0, 0x0}, uint128 = 0x0}
+xmm7           {v4_float = {0x0, 0x0, 0x0, 0x1f80}, v2_double = {0x0, 0x1f8000000000}, v16_int8 = {0x0 <repeats 12 times>, 0x80, 0x1f, 0x0, 0x0}, v8_int16 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x1f80, 0x0}, v4_int32 = {0x0, 0x0, 0x0, 0x1f80}, v2_int64 = {0x0, 0x1f8000000000}, uint128 = 0x1f80000000000000000000000000}
+mxcsr          0x1f80              [ IM DM ZM OM UM PM ]
+$1 = (void *) 0xeebfdff0
+$2 = (void *) 0xeebfdfc4
+Stack frame at 0xeebfdfc8:
+ eip = 0x800033 in umain (user/breakpoint.c:8); saved eip = 0x80008a
+ called by frame at 0xeebfdff8
+ source language c.
+ Arglist at 0xeebfdfc0, args: argc=0, argv=0x0
+ Locals at 0xeebfdfc0, Previous frame's sp is 0xeebfdfc8
+ Saved registers:
+  eip at 0xeebfdfc4
+Stack frame at 0xeebfdff8:
+ eip = 0x80008a in libmain (lib/libmain.c:25); saved eip = 0x800031
+ called by frame at 0x0, caller of frame at 0xeebfdfc8
+ source language c.
+ Arglist at 0xeebfdff0, args: argc=0, argv=0x0
+ Locals at 0xeebfdff0, Previous frame's sp is 0xeebfdff8
+ Saved registers:
+  ebx at 0xeebfdfe4, ebp at 0xeebfdff0, esi at 0xeebfdfe8, edi at 0xeebfdfec, eip at 0xeebfdff4
+$3 = (void *) 0xeebfdff0
+Breakpoint 3 at 0xf010084d: file kern/monitor.c, line 62.
+Breakpoint 4 at 0xf01043f0: file kern/trapentry.S, line 108.
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+=> 0x800033 <umain>:	int3   
+
+Breakpoint 2, umain (argc=0, argv=0x0) at user/breakpoint.c:8
+Continuing.
+=> 0xf01043f0 <_alltraps>:	push   %ds
+
+Breakpoint 4, _alltraps () at kern/trapentry.S:108
+Continuing.
+
+Program received signal SIGINT, Interrupt.
+=> 0xf010055c <kbd_intr+16>:	lea    -0x80747(%eax),%eax
+kbd_intr () at kern/console.c:371
