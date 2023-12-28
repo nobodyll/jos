@@ -368,7 +368,9 @@ page_init(void)
 	for (i = 0; i < npages; i++) {
 		if (i == 0 || 
 		(page2pa(&pages[i]) >= IOPHYSMEM && page2pa(&pages[i]) < EXTPHYSMEM) || 
-		(page2pa(&pages[i]) >= EXTPHYSMEM && page2pa(&pages[i]) < PADDR(kernel_end_addr))) 
+		(page2pa(&pages[i]) >= EXTPHYSMEM && page2pa(&pages[i]) < PADDR(kernel_end_addr)) || 
+		(page2pa(&pages[i]) == MPENTRY_PADDR)
+		) 
 			continue;
 
 		// debug
