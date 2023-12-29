@@ -55,8 +55,12 @@ i386_init(void)
 	// ENV_CREATE(user_hello, ENV_TYPE_USER);
 	// ENV_CREATE(user_divzero, ENV_TYPE_USER);
 	// ENV_CREATE(user_softint, ENV_TYPE_USER);
-	ENV_CREATE(user_breakpoint, ENV_TYPE_USER);
+	// ENV_CREATE(user_breakpoint, ENV_TYPE_USER);
 	// ENV_CREATE(user_testbss, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
 #endif // TEST*
 
 	// Schedule and run the first user environment!
@@ -114,6 +118,8 @@ mp_main(void)
 	//
 	// Your code here:
 	lock_kernel();
+
+	sched_yield();
 
 	// Remove this after you finish Exercise 6
 	for (;;);
