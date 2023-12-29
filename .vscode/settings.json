@@ -15,7 +15,8 @@
         "lib.h": "c",
         "monitor.h": "c",
         "env.h": "c",
-        "syscall.h": "c"
+        "syscall.h": "c",
+        "cpu.h": "c"
     },
     "lldb.showDisassembly": "auto",
     "lldb.dereferencePointers": true,

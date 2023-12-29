@@ -714,7 +714,7 @@ mmio_map_region(physaddr_t pa, size_t size)
 
 	void *ret = (void*)base;
 
-  boot_map_region(kern_pgdir, base, size, pa, PTE_PCD | PTE_PWT);
+  boot_map_region(kern_pgdir, base, size, pa, PTE_PCD | PTE_PWT | PTE_W);
 	base += ROUNDUP((uint32_t)size, PGSIZE);
 
   return ret;
