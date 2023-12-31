@@ -591,7 +591,7 @@ env_run(struct Env *e)
 
 	// Step 1
 	if (curenv != NULL && curenv->env_status == ENV_RUNNING) { 	// 1
-		curenv->env_status = ENV_NOT_RUNNABLE; 
+		curenv->env_status = ENV_RUNNABLE; 
 	}
 	curenv = e; 																								// 2
 	curenv->env_status = ENV_RUNNING; 													// 3

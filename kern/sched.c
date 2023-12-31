@@ -29,23 +29,36 @@ sched_yield(void)
   // below to halt the cpu.
 
   // LAB 4: Your code here.
-  if (curenv == NULL)
+  if (curenv == NULL) 
     idle = &envs[0];
-  else
-    idle = curenv + 1;
+  else {
+		if (curenv + 1 <= &envs[NENV - 1])
+			idle = curenv + 1;
+		else if (curenv + 1 == (struct Env *)envs + NENV)
+			idle = &envs[0];
+		else 
+			panic("sched_yield error\n");
+	}
 
   int i = 0;
-  for (; i < NENV; i++, idle++) {
+  for (; i < NENV; i++) {
     if (idle->env_status == ENV_RUNNABLE) {
       // found one env which status is runnable.
       env_run(idle);
     }
+
+		if (idle + 1 <= &envs[NENV - 1])
+			idle++;
+		else if (idle + 1 == (struct Env *)envs + NENV)
+			idle = &envs[0];
+		else 
+			panic("sched_yield error\n");
   }
 
   // If no envs are runnable, but the environment previously
   // running on this CPU is still ENV_RUNNING, it's okay to
   // choose that environment.
-  if (i == NENV && curenv->env_status == ENV_RUNNING) 
+  if (i == NENV && curenv && curenv->env_status == ENV_RUNNING) 
     env_run(curenv);
   
 
