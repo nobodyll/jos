@@ -578,7 +578,7 @@ page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 	pte = pgdir_walk(pgdir, va, 1);	
 	if (pte == 0) {
 		// maybe out of free memory. return -E_NO_MEM
-		return -1;
+		return -E_NO_MEM;
 	}
 
 	pp->pp_ref++;
