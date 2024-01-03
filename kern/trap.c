@@ -1,6 +1,7 @@
 #include <inc/mmu.h>
 #include <inc/x86.h>
 #include <inc/assert.h>
+#include <inc/string.h>
 
 #include <kern/pmap.h>
 #include <kern/trap.h>
@@ -202,7 +203,7 @@ trap_dispatch(struct Trapframe *tf)
   }
   case T_PGFLT: // 14 page fault
     page_fault_handler(tf);
-    break;
+		break;
   case T_BRKPT:
     cprintf("next instruction at %08x\n", tf->tf_eip);
     monitor(tf);
@@ -310,57 +311,121 @@ trap(struct Trapframe *tf)
 void
 page_fault_handler(struct Trapframe *tf)
 {
-	uint32_t fault_va;
+  uint32_t fault_va;
 
-	// Read processor's CR2 register to find the faulting address
-	fault_va = rcr2();
+  // Read processor's CR2 register to find the faulting address
+  fault_va = rcr2();
 
-	// Handle kernel-mode page faults.
+  // Handle kernel-mode page faults.
 
-	// LAB 3: Your code here.
-	// If the page fault occur in the kernel mode, we panic()
-	if ((tf->tf_cs & 0x3) == 0) {
+  // LAB 3: Your code here.
+  // If the page fault occur in the kernel mode, we panic()
+  if ((tf->tf_cs & 0x3) == 0) {
     panic("page fault occur in the kernel mode\n");
-	}
+  }
 
-	// We've already handled kernel-mode exceptions, so if we get here,
-	// the page fault happened in user mode.
+  // We've already handled kernel-mode exceptions, so if we get here,
+  // the page fault happened in user mode.
 
-	// Call the environment's page fault upcall, if one exists.  Set up a
-	// page fault stack frame on the user exception stack (below
-	// UXSTACKTOP), then branch to curenv->env_pgfault_upcall.
-	//
-	// The page fault upcall might cause another page fault, in which case
-	// we branch to the page fault upcall recursively, pushing another
-	// page fault stack frame on top of the user exception stack.
-	//
-	// It is convenient for our code which returns from a page fault
-	// (lib/pfentry.S) to have one word of scratch space at the top of the
-	// trap-time stack; it allows us to more easily restore the eip/esp. In
-	// the non-recursive case, we don't have to worry about this because
-	// the top of the regular user stack is free.  In the recursive case,
-	// this means we have to leave an extra word between the current top of
-	// the exception stack and the new stack frame because the exception
-	// stack _is_ the trap-time stack.
-	//
-	// If there's no page fault upcall, the environment didn't allocate a
-	// page for its exception stack or can't write to it, or the exception
-	// stack overflows, then destroy the environment that caused the fault.
-	// Note that the grade script assumes you will first check for the page
-	// fault upcall and print the "user fault va" message below if there is
-	// none.  The remaining three checks can be combined into a single test.
-	//
-	// Hints:
-	//   user_mem_assert() and env_run() are useful here.
-	//   To change what the user environment runs, modify 'curenv->env_tf'
-	//   (the 'tf' variable points at 'curenv->env_tf').
+  // Call the environment's page fault upcall, if one exists.  Set up a
+  // page fault stack frame on the user exception stack (below
+  // UXSTACKTOP), then branch to curenv->env_pgfault_upcall.
+  //
+  // The page fault upcall might cause another page fault, in which case
+  // we branch to the page fault upcall recursively, pushing another
+  // page fault stack frame on top of the user exception stack.
+  //
+  // It is convenient for our code which returns from a page fault
+  // (lib/pfentry.S) to have one word of scratch space at the top of the
+  // trap-time stack; it allows us to more easily restore the eip/esp. In
+  // the non-recursive case, we don't have to worry about this because
+  // the top of the regular user stack is free.  In the recursive case,
+  // this means we have to leave an extra word between the current top of
+  // the exception stack and the new stack frame because the exception
+  // stack _is_ the trap-time stack.
+  //
+  // If there's no page fault upcall, the environment didn't allocate a
+  // page for its exception stack or can't write to it, or the exception
+  // stack overflows, then destroy the environment that caused the fault.
+  // Note that the grade script assumes you will first check for the page
+  // fault upcall and print the "user fault va" message below if there is
+  // none.  The remaining three checks can be combined into a single test.
+  //
+  // Hints:
+  //   user_mem_assert() and env_run() are useful here.
+  //   To change what the user environment runs, modify 'curenv->env_tf'
+  //   (the 'tf' variable points at 'curenv->env_tf').
 
-	// LAB 4: Your code here.
+  // LAB 4: Your code here.
 
-	// Destroy the environment that caused the fault.
-	cprintf("[%08x] user fault va %08x ip %08x\n",
-		curenv->env_id, fault_va, tf->tf_eip);
-	print_trapframe(tf);
-	env_destroy(curenv);
+  // If there's no page fault upcall;
+  if (curenv->env_pgfault_upcall == NULL) {
+    goto bad;
+  }
+
+  // if the environment didn't allocate a page for its exception stack
+  // pte_t *pte = 0;
+  // struct PageInfo *page = 0;
+  // page = page_lookup(curenv->env_pgdir, (void *)(UXSTACKTOP - PGSIZE), &pte);
+	// if (page == NULL)
+	// 	goto bad;
+	// check if we have PTE_W permission
+	user_mem_assert(curenv, (void*)(UXSTACKTOP - PGSIZE), PGSIZE, PTE_W);
+
+	// if the exception stack overflows
+	if (curenv->env_tf.tf_esp == USTACKTOP && fault_va == USTACKTOP)
+		goto bad;
+
+  uint32_t *ptr = 0;
+  // check if we are already in the page fault handerl
+  if ((curenv->env_tf.tf_esp <= UXSTACKTOP - 1) &&
+      (curenv->env_tf.tf_esp >= UXSTACKTOP - PGSIZE)) {
+    ptr = (uint32_t *)curenv->env_tf.tf_esp;
+    // push an empty 32bit word;
+    ptr -= 4;
+  } else {
+    ptr = (uint32_t *)UXSTACKTOP;
+  }
+
+  /*
+                      <-- UXSTACKTOP
+  trap-time esp
+  trap-time eflags
+  trap-time eip
+  trap-time eax       start of struct PushRegs
+  trap-time ecx
+  trap-time edx
+  trap-time ebx
+  trap-time esp
+  trap-time ebp
+  trap-time esi
+  trap-time edi       end of struct PushRegs
+  tf_err (error code)
+  fault_va            <-- %esp when handler is run
+  */
+
+  ptr -= 4;
+  *ptr = curenv->env_tf.tf_esp;
+  ptr -= 4;
+  *ptr = curenv->env_tf.tf_eflags;
+  ptr -= 4;
+  *ptr = curenv->env_tf.tf_eip;
+  ptr -= sizeof(struct PushRegs);
+  memcpy(ptr, &curenv->env_tf.tf_regs, sizeof(struct PushRegs));
+  ptr -= 4;
+  *ptr = curenv->env_tf.tf_err;
+  ptr -= 4;
+  *ptr = fault_va;
+
+  curenv->env_tf.tf_esp = (uintptr_t)ptr;
+  curenv->env_tf.tf_eip = (uintptr_t)curenv->env_pgfault_upcall;
+	env_run(curenv);
+
+bad:
+  // Destroy the environment that caused the fault.
+  cprintf("[%08x] user fault va %08x ip %08x\n", curenv->env_id, fault_va,
+          tf->tf_eip);
+  print_trapframe(tf);
+  env_destroy(curenv);
 }
 
