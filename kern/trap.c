@@ -363,28 +363,23 @@ page_fault_handler(struct Trapframe *tf)
     goto bad;
   }
 
-  // if the environment didn't allocate a page for its exception stack
-  // pte_t *pte = 0;
-  // struct PageInfo *page = 0;
-  // page = page_lookup(curenv->env_pgdir, (void *)(UXSTACKTOP - PGSIZE), &pte);
-	// if (page == NULL)
-	// 	goto bad;
-	// check if we have PTE_W permission
+	user_mem_assert(curenv, (void*)curenv->env_pgfault_upcall, PGSIZE, PTE_W);
+
 	user_mem_assert(curenv, (void*)(UXSTACKTOP - PGSIZE), PGSIZE, PTE_W);
 
 	// if the exception stack overflows
 	if (curenv->env_tf.tf_esp == USTACKTOP && fault_va == USTACKTOP)
 		goto bad;
 
-  uint32_t *ptr = 0;
+  char *ptr = 0;
   // check if we are already in the page fault handerl
   if ((curenv->env_tf.tf_esp <= UXSTACKTOP - 1) &&
       (curenv->env_tf.tf_esp >= UXSTACKTOP - PGSIZE)) {
-    ptr = (uint32_t *)curenv->env_tf.tf_esp;
+    ptr = (char *)curenv->env_tf.tf_esp;
     // push an empty 32bit word;
     ptr -= 4;
   } else {
-    ptr = (uint32_t *)UXSTACKTOP;
+    ptr = (char *)UXSTACKTOP;
   }
 
   /*
@@ -405,17 +400,17 @@ page_fault_handler(struct Trapframe *tf)
   */
 
   ptr -= 4;
-  *ptr = curenv->env_tf.tf_esp;
+  *(uint32_t*)ptr = curenv->env_tf.tf_esp;
   ptr -= 4;
-  *ptr = curenv->env_tf.tf_eflags;
+  *(uint32_t*)ptr = curenv->env_tf.tf_eflags;
   ptr -= 4;
-  *ptr = curenv->env_tf.tf_eip;
+  *(uint32_t*)ptr = curenv->env_tf.tf_eip;
   ptr -= sizeof(struct PushRegs);
-  memcpy(ptr, &curenv->env_tf.tf_regs, sizeof(struct PushRegs));
+  memcpy((void*)ptr, &curenv->env_tf.tf_regs, sizeof(struct PushRegs));
   ptr -= 4;
-  *ptr = curenv->env_tf.tf_err;
+  *(uint32_t*)ptr = curenv->env_tf.tf_err;
   ptr -= 4;
-  *ptr = fault_va;
+  *(uint32_t*)ptr = fault_va;
 
   curenv->env_tf.tf_esp = (uintptr_t)ptr;
   curenv->env_tf.tf_eip = (uintptr_t)curenv->env_pgfault_upcall;

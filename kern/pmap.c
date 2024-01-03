@@ -747,7 +747,7 @@ user_mem_check(struct Env *env, const void *va, size_t len, int perm)
   // LAB 3: Your code here.
   // begin_addr and end_addr is page-aligned.
   uint32_t begin_addr = ROUNDDOWN((uint32_t)va, PGSIZE);
-  uint32_t end_addr = ROUNDDOWN((uint32_t)(va + len), PGSIZE);
+  uint32_t end_addr = ROUNDDOWN((uint32_t)(va + len - 1), PGSIZE);
 
   perm = perm | PTE_P;
 
