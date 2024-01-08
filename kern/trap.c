@@ -363,7 +363,7 @@ page_fault_handler(struct Trapframe *tf)
     goto bad;
   }
 
-	user_mem_assert(curenv, (void*)curenv->env_pgfault_upcall, PGSIZE, PTE_W);
+	user_mem_assert(curenv, (void*)curenv->env_pgfault_upcall, PGSIZE, 0);
 
 	user_mem_assert(curenv, (void*)(UXSTACKTOP - PGSIZE), PGSIZE, PTE_W);
 
