@@ -1,9 +1,13 @@
 layout split
-wh asm 9
+wh asm 30
 focus cmd
-b load_icode
-b region_alloc
-b env_run
-c
-c
-c
+#b load_icode
+#b region_alloc
+#b env_run
+
+# for lab4
+
+
+add-symbol-file obj/user/forktree
+b env_destroy
+
