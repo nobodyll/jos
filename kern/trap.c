@@ -84,7 +84,7 @@ trap_init(void)
     // cprintf("vectors[%d] {%08x}\n", i, vectors[i]);
   }
 	SETGATE(idt[T_BRKPT], 1, GD_KT, vectors[T_BRKPT], 3);
-	SETGATE(idt[T_SYSCALL], 1, GD_KT, vectors[T_SYSCALL], 3);
+	SETGATE(idt[T_SYSCALL], 0, GD_KT, vectors[T_SYSCALL], 3);
 	// cprintf("idt[3] {%08x} \n", idt[3]);
 	// cprintf("idt[3] {%08x} \n", (int) (*((int*)(&idt[3]) + 1)) );
   trap_init_percpu();
@@ -190,6 +190,18 @@ print_regs(struct PushRegs *regs)
 	cprintf("  eax  0x%08x\n", regs->reg_eax);
 }
 
+/*
+#define IRQ_OFFSET	32	// IRQ 0 corresponds to int IRQ_OFFSET
+
+// Hardware IRQ numbers. We receive these as (IRQ_OFFSET+IRQ_WHATEVER)
+#define IRQ_TIMER        0
+#define IRQ_KBD          1
+#define IRQ_SERIAL       4
+#define IRQ_SPURIOUS     7
+#define IRQ_IDE         14
+#define IRQ_ERROR       19
+*/
+
 static void
 trap_dispatch(struct Trapframe *tf)
 {
@@ -203,7 +215,7 @@ trap_dispatch(struct Trapframe *tf)
   }
   case T_PGFLT: // 14 page fault
     page_fault_handler(tf);
-		break;
+    break;
   case T_BRKPT:
     cprintf("next instruction at %08x\n", tf->tf_eip);
     monitor(tf);
@@ -219,22 +231,26 @@ trap_dispatch(struct Trapframe *tf)
     tf->tf_regs.reg_eax = syscall(syscallno, a1, a2, a3, a4, a5);
     return;
   } break;
+  case IRQ_OFFSET + IRQ_TIMER:
+	  // cprintf("timer interrupt\n");
+		lapic_eoi();
+	  sched_yield();
   default:
     break;
   }
 
-	// Handle spurious interrupts
-	// The hardware sometimes raises these because of noise on the
-	// IRQ line or other reasons. We don't care.
-	if (tf->tf_trapno == IRQ_OFFSET + IRQ_SPURIOUS) {
-		cprintf("Spurious interrupt on irq 7\n");
-		print_trapframe(tf);
-		return;
-	}
+  // Handle spurious interrupts
+  // The hardware sometimes raises these because of noise on the
+  // IRQ line or other reasons. We don't care.
+  if (tf->tf_trapno == IRQ_OFFSET + IRQ_SPURIOUS) {
+    cprintf("Spurious interrupt on irq 7\n");
+    print_trapframe(tf);
+    return;
+  }
 
-	// Handle clock interrupts. Don't forget to acknowledge the
-	// interrupt using lapic_eoi() before calling the scheduler!
-	// LAB 4: Your code here.
+  // Handle clock interrupts. Don't forget to acknowledge the
+  // interrupt using lapic_eoi() before calling the scheduler!
+  // LAB 4: Your code here.
 
   // Unexpected trap: The user process or the kernel has a bug.
   print_trapframe(tf);
