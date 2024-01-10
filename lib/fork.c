@@ -93,7 +93,7 @@ duppage(envid_t envid, unsigned pn)
        (!(uvpt[pn] & PTE_W) && (uvpt[pn] & PTE_COW))) ) {
     // page is copy-on-write page.
     // set child's page perm with PTW_COW
-    perm = uvpt[pn] & 0xFFF;
+    perm = uvpt[pn] & 0xF;
     perm |= PTE_COW;
     perm &= ~PTE_W;
     if ((r = sys_page_map(0, va, envid, va, perm)) < 0) {
